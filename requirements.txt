@@ -1,0 +1,14 @@
+Django==5.0.1
+django-crispy-forms==2.1
+crispy-tailwind==1.0.3
+Pillow==11.2.1
+python-dotenv==1.0.0
+django-simple-history==3.4.0
+pytesseract==0.3.10
+nltk==3.8.1
+wordcloud==1.9.2
+matplotlib==3.8.2
+opencv-python-headless==4.11.0.86
+transformers==4.36.2
+torch==2.1.2
+mysqlclient==2.2.1

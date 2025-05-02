@@ -1,0 +1,233 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Nueva Nota - {{ patient.get_full_name }} - SigmundFiles{% endblock %}
+
+{% block content %}
+<div class="note-form-container">
+    <div class="note-form-header">
+        <h1 class="note-form-title">Nueva Nota</h1>
+        <p class="note-form-subtitle">{{ patient.get_full_name }}</p>
+    </div>
+
+    <form method="POST" class="note-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <h2 class="form-section-title">Contenido de la Nota</h2>
+            
+            <!-- Controles de dictado -->
+            <div class="dictation-controls">
+                <button type="button" id="startDictation" class="btn btn-outline">
+                    🎤 Iniciar Dictado
+                </button>
+                <button type="button" id="stopDictation" class="btn btn-outline" style="display: none;">
+                    ⏹️ Detener Dictado
+                </button>
+            </div>
+            
+            {{ form.content }}
+            {% if form.content.errors %}
+            <div class="form-error">
+                {{ form.content.errors }}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sección de imagen -->
+        <div class="form-section">
+            <h2 class="form-section-title">Imagen de la Nota</h2>
+            <div class="image-upload-container">
+                <div class="image-preview" id="imagePreview">
+                    <div class="image-placeholder">
+                        <span class="image-placeholder-icon">📷</span>
+                        <span class="image-placeholder-text">Haz clic para agregar una imagen</span>
+                    </div>
+                </div>
+                {{ form.image }}
+                {% if form.image.errors %}
+                <div class="form-error">
+                    {{ form.image.errors }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{% url 'patient_notes' pk %}" class="btn btn-outline">
+                Cancelar
+            </a>
+            <button type="submit" class="btn btn-primary">
+                Guardar Nota
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.note-form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.note-form-header {
+    margin-bottom: 2rem;
+}
+
+.note-form-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.note-form-subtitle {
+    color: var(--text-light);
+}
+
+.form-section {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.dictation-controls {
+    margin-bottom: 1rem;
+}
+
+textarea.dictating {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(50, 142, 199, 0.2);
+}
+
+/* Estilos para la carga de imágenes */
+.image-upload-container {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.image-preview {
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #e2e8f0;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.image-preview:hover {
+    border-color: var(--primary-blue);
+    background: #f8fafc;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+}
+
+.image-placeholder-icon {
+    font-size: 2rem;
+}
+
+.image-placeholder-text {
+    font-size: 0.875rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuración del dictado de voz
+    const startButton = document.getElementById('startDictation');
+    const stopButton = document.getElementById('stopDictation');
+    const textArea = document.querySelector('textarea');
+    
+    let recognition = null;
+    
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'es-MX';
+        
+        recognition.onresult = function(event) {
+            let finalTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                }
+            }
+            if (finalTranscript) {
+                textArea.value += (textArea.value ? '\n' : '') + finalTranscript;
+            }
+        };
+        
+        recognition.onerror = function(event) {
+            console.error('Error en el reconocimiento de voz:', event.error);
+            stopDictation();
+        };
+    }
+    
+    function startDictation() {
+        if (recognition) {
+            recognition.start();
+            startButton.style.display = 'none';
+            stopButton.style.display = 'inline-block';
+            textArea.classList.add('dictating');
+        }
+    }
+    
+    function stopDictation() {
+        if (recognition) {
+            recognition.stop();
+            startButton.style.display = 'inline-block';
+            stopButton.style.display = 'none';
+            textArea.classList.remove('dictating');
+        }
+    }
+    
+    startButton.addEventListener('click', startDictation);
+    stopButton.addEventListener('click', stopDictation);
+
+    // Configuración de la previsualización de imagen
+    const imageInput = document.querySelector('input[type="file"]');
+    const imagePreview = document.getElementById('imagePreview');
+
+    imagePreview.addEventListener('click', () => {
+        imageInput.click();
+    });
+
+    imageInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.innerHTML = `<img src="${e.target.result}" alt="Vista previa">`;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+});
+</script>
+{% endblock %}

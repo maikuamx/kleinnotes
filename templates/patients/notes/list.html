@@ -1,0 +1,111 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Notas - {{ patient.get_full_name }} - SigmundFiles{% endblock %}
+
+{% block content %}
+<div class="notes-container">
+    <div class="notes-header">
+        <h1 class="notes-title">Notas de {{ patient.get_full_name }}</h1>
+        <a href="{% url 'note_create' patient.pk %}" class="btn btn-primary">
+            Nueva Nota
+        </a>
+    </div>
+
+    <div class="notes-grid">
+        {% for note in notes %}
+        <div class="note-card">
+            <div class="note-content">
+                <div class="note-text">{{ note.content|linebreaks }}</div>
+                <div class="note-meta">
+                    <span>{{ note.created_at|date:"d/m/Y H:i" }}</span>
+                    <div class="note-actions">
+                        <a href="{% url 'note_edit' note.id %}" class="btn btn-outline btn-sm">
+                            Editar
+                        </a>
+                        <a href="{% url 'note_delete' note.id %}" class="btn btn-danger btn-sm">
+                            Eliminar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <p>No hay notas registradas</p>
+            <a href="{% url 'note_create' patient.id %}" class="btn btn-primary">
+                Crear Primera Nota
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.notes-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.notes-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.notes-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.note-card {
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.note-content {
+    padding: 1.5rem;
+}
+
+.note-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+}
+
+.note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.note-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,25 @@
+/* Botón de menú móvil */
+.mobile-nav-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 60;
+    background: var(--white);
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border: none;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Solo mostrar en móvil y en las vistas que lo necesitan */
+@media (max-width: 1024px) {
+    .has-sidebar .mobile-nav-toggle {
+        display: flex;
+    }
+}

@@ -1,0 +1,87 @@
+{% extends "base_landing.html" %}
+{% load static %}
+
+{% block title %}KleinNotes - Gestión Digital de Expedientes Psicológicos{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>KleinNotes</h1>
+            <p class="hero-subtitle">La plataforma digital que revoluciona la gestión de expedientes psicológicos</p>
+            <div class="hero-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-primary">Ir al Dashboard</a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-primary">Comenzar Ahora</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline">Iniciar Sesión</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'img/landing/hero-illustration.jpg' %}" alt="KleinNotes Platform">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>Características Principales</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Digitalización Inteligente</h3>
+                <p>Convierte tus notas manuscritas en texto digital utilizando tecnología OCR avanzada</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Seguridad Garantizada</h3>
+                <p>Protección de datos de nivel profesional para mantener la confidencialidad de tus pacientes</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Análisis de Datos</h3>
+                <p>Visualiza patrones y tendencias con nubes de palabras y análisis de texto</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Acceso Universal</h3>
+                <p>Gestiona tus expedientes desde cualquier dispositivo, en cualquier momento</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2>¿Cómo Funciona?</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Registra tus Pacientes</h3>
+                <p>Crea perfiles detallados con toda la información relevante de tus pacientes</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Digitaliza tus Notas</h3>
+                <p>Sube fotos de tus notas manuscritas y déjanos convertirlas en texto digital</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Analiza y Organiza</h3>
+                <p>Accede a herramientas de análisis y visualización para mejorar tu práctica</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Comienza tu Transformación Digital</h2>
+            <p>Únete a los profesionales que ya están modernizando su práctica psicológica</p>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}" class="btn btn-primary">Crear Cuenta Gratuita</a>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Editar Nota - SigmundFiles{% endblock %}
+
+{% block content %}
+<div class="note-edit-container">
+    <div class="note-edit-header">
+        <h1 class="note-edit-title">Editar Nota</h1>
+        <p class="note-edit-subtitle">Paciente: {{ object.patient.get_full_name }}</p>
+    </div>
+
+    <div class="note-edit-content">
+        <form method="POST" class="edit-form">
+            {% csrf_token %}
+            <div class="form-section">
+                <h2 class="form-section-title">Contenido de la Nota</h2>
+                {{ form.content }}
+                {% if form.content.errors %}
+                <div class="form-error">
+                    {{ form.content.errors }}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-actions">
+                <a href="{% url 'patient_notes' object.patient.id %}" class="btn btn-outline">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.note-edit-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.note-edit-header {
+    margin-bottom: 2rem;
+}
+
+.note-edit-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.note-edit-subtitle {
+    color: var(--text-light);
+}
+
+.form-section {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+</style>
+{% endblock %}

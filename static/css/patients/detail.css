@@ -1,0 +1,67 @@
+/* Agregar estilos para la sección de notas */
+.notes-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.note-card {
+    background: #f8fafc;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.note-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.note-image {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.note-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.note-content {
+    padding: 1rem;
+}
+
+.note-text {
+    font-size: 0.875rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.notes-more {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Ajustar el botón en el título de la sección */
+.section-title .btn-sm {
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
