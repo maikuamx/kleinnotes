@@ -1,12 +1,12 @@
-Django==5.0.1
-django-crispy-forms==2.1
+Django==5.1.7
+django-crispy-forms==2.3
 crispy-tailwind==1.0.3
-Pillow==11.2.1
+pillow==11.2.1
 python-dotenv==1.0.0
 django-simple-history==3.4.0
 pytesseract==0.3.10
 nltk==3.8.1
-wordcloud==1.9.2
+wordcloud==1.9.4.2
 matplotlib==3.8.2
 opencv-python-headless==4.11.0.86
 transformers==4.36.2
